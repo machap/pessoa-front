@@ -3,7 +3,7 @@
 
     <nav>
       <div class="nav-wrapper blue darken-1">
-        <a href="#" class="brand-logo center">Pessoas Front</a>
+        <a href="#" class="brand-logo center">Cadastro de Pessoas</a>
       </div>
     </nav>
 
@@ -50,7 +50,7 @@
             <td>{{ pessoa.sexo }}</td>
             <td>
               <button @click="editar(pessoa)" class="waves-effect btn-small blue darken-1"><i class="material-icons">create</i></button>
-              <button class="waves-effect btn-small red darken-1"><i class="material-icons">delete_sweep</i></button>
+              <button @click="remover(pessoa)" class="waves-effect btn-small red darken-1"><i class="material-icons">delete_sweep</i></button>
             </td>
 
           </tr>
@@ -65,6 +65,7 @@
 </template>
 
 <script>
+
 import Pessoa from "./services/pessoas";
 
 export default {
@@ -121,9 +122,23 @@ export default {
 
     editar(pessoa) {
       this.pessoa = pessoa;
+    },
+
+    remover(pessoa) {
+      if (confirm("Deseja excluir o registro ?")) {
+        Pessoa.apagar(pessoa)
+          .then(resposta => {
+            this.listar();
+            this.errors = [];
+          })
+          .catch(e => {
+            this.errors = e.response.data.errors;
+          });
+      }
     }
   }
 };
+
 </script>
 
 <style>

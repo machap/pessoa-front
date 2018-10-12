@@ -11,5 +11,9 @@ export default {
 
     atualizar:(pessoa) =>{
         return http.put('pessoa', pessoa);
+    },
+
+    apagar:(pessoa) =>  {
+        return http.delete('pessoa', {data: pessoa});
     }
 }
