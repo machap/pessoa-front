@@ -15,8 +15,8 @@
           <input type="text" placeholder="Nome" required v-model="pessoa.nome">
           <label>Idade</label>
           <input type="number" placeholder="Idade" required v-model="pessoa.idade">
-          <label>Sexo</label>
-          <input type="text" placeholder="Sexo" required v-model="pessoa.sexo">
+          <label>Email</label>
+          <input type="text" placeholder="Email" required v-model="pessoa.email">
 
           <ul>
             <li v-for="(erro, index) of errors" :key="index">
@@ -35,7 +35,7 @@
           <tr>
             <th>NOME</th>
             <th>IDADE</th>
-            <th>SEXO</th>
+            <th>EMAIL</th>
             <th>OPÇÕES</th>
           </tr>
 
@@ -47,7 +47,7 @@
 
             <td>{{ pessoa.nome }}</td>
             <td>{{ pessoa.idade }}</td>
-            <td>{{ pessoa.sexo }}</td>
+            <td>{{ pessoa.email }}</td>
             <td>
               <button @click="editar(pessoa)" class="waves-effect btn-small blue darken-1"><i class="material-icons">create</i></button>
               <button @click="remover(pessoa)" class="waves-effect btn-small red darken-1"><i class="material-icons">delete_sweep</i></button>
@@ -76,7 +76,7 @@ export default {
         id: "",
         nome: "",
         idade: "",
-        sexo: ""
+        email: ""
       },
       pessoas: [],
       errors: []
