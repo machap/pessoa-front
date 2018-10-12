@@ -12,12 +12,18 @@
       <form @submit.prevent="salvar">
 
           <label>Nome</label>
-          <input type="text" placeholder="Nome" v-model="pessoa.nome">
+          <input type="text" placeholder="Nome" required v-model="pessoa.nome">
           <label>Idade</label>
-          <input type="number" placeholder="Idade" v-model="pessoa.idade">
+          <input type="number" placeholder="Idade" required v-model="pessoa.idade">
           <label>Sexo</label>
-          <input type="text" placeholder="Sexo" v-model="pessoa.sexo">
+          <input type="text" placeholder="Sexo" required v-model="pessoa.sexo">
 
+          <ul>
+            <li v-for="(erro, index) of errors" :key="index">
+              campo <b>{{erro.field}}</b> - {{erro.defaultMessage}}
+            </li>
+          </ul>
+      
           <button class="waves-effect waves-light btn-small">Salvar<i class="material-icons left">save</i></button>
 
       </form>
@@ -43,7 +49,7 @@
             <td>{{ pessoa.idade }}</td>
             <td>{{ pessoa.sexo }}</td>
             <td>
-              <button class="waves-effect btn-small blue darken-1"><i class="material-icons">create</i></button>
+              <button @click="editar(pessoa)" class="waves-effect btn-small blue darken-1"><i class="material-icons">create</i></button>
               <button class="waves-effect btn-small red darken-1"><i class="material-icons">delete_sweep</i></button>
             </td>
 
@@ -62,14 +68,17 @@
 import Pessoa from "./services/pessoas";
 
 export default {
+  name: "app",
   data() {
     return {
       pessoa: {
+        id: "",
         nome: "",
         idade: "",
         sexo: ""
       },
-      pessoas: []
+      pessoas: [],
+      errors: []
     };
   },
 
@@ -85,11 +94,33 @@ export default {
     },
 
     salvar() {
-      this.pessoa = {};
-      Pessoa.salvar(this.pessoa).then(resposta => {
-        alert("Salvo com sucesso!");
-        this.listar();
-      });
+      if (this.pessoa.id) {
+        Pessoa.atualizar(this.pessoa)
+          .then(resposta => {
+            this.pessoa = {};
+            alert("Atualizado com sucesso!");
+            this.listar();
+            errors - [];
+          })
+          .catch(e => {
+            this.errors = e.response.data.errors;
+          });
+      } else {
+        Pessoa.salvar(this.pessoa)
+          .then(resposta => {
+            this.pessoa = {};
+            alert("Salvo com sucesso!");
+            this.listar();
+            errors - [];
+          })
+          .catch(e => {
+            this.errors = e.response.data.errors;
+          });
+      }
+    },
+
+    editar(pessoa) {
+      this.pessoa = pessoa;
     }
   }
 };
